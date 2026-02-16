@@ -1,67 +1,55 @@
 package clinicapp.ui.screens;
 
 import clinicapp.AppContext;
+import clinicapp.MainApp;
 import clinicapp.Role;
 import clinicapp.RoleFunctionality;
 import clinicapp.navigation.SceneNavigator;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 public class FunctionalityScreenFactory {
-    private final Map<RoleFunctionality, ScreenBuilder> builders = new EnumMap<>(RoleFunctionality.class);
+    private final SceneNavigator navigator;
 
-    public FunctionalityScreenFactory() {
-        // Recursos humanos
-        builders.put(RoleFunctionality.RH_CREAR_USUARIO_EMPLEADO, CreateEmployeeScreen::new);
-        builders.put(RoleFunctionality.RH_ELIMINAR_USUARIO_EMPLEADO, DeleteEmployeeScreen::new);
-        builders.put(RoleFunctionality.RH_ACTUALIZAR_DATOS_EMPLEADO, UpdateEmployeeScreen::new);
-        builders.put(RoleFunctionality.RH_LISTAR_EMPLEADOS_USUARIOS, ListEmployeesScreen::new);
-
-        // Administrativo
-        builders.put(RoleFunctionality.ADM_REGISTRAR_PACIENTE, RegisterPatientScreen::new);
-        builders.put(RoleFunctionality.ADM_REGISTRAR_CONTACTO_EMERGENCIA, RegisterEmergencyContactScreen::new);
-        builders.put(RoleFunctionality.ADM_REGISTRAR_POLIZA_SEGURO, RegisterInsurancePolicyScreen::new);
-        builders.put(RoleFunctionality.ADM_PROGRAMAR_CITA, ScheduleAppointmentScreen::new);
-        builders.put(RoleFunctionality.ADM_GENERAR_IMPRIMIR_FACTURA, GenerateInvoiceScreen::new);
-
-        // Soporte
-        builders.put(RoleFunctionality.SOP_GESTION_INVENTARIO_MEDICAMENTOS, MedicationInventoryScreen::new);
-        builders.put(RoleFunctionality.SOP_GESTION_INVENTARIO_PROCEDIMIENTOS, ProcedureInventoryScreen::new);
-        builders.put(RoleFunctionality.SOP_GESTION_INVENTARIO_AYUDAS, DiagnosticAidInventoryScreen::new);
-        builders.put(RoleFunctionality.SOP_SOPORTE_TECNICO_USUARIOS, SupportTicketScreen::new);
-
-        // Enfermería
-        builders.put(RoleFunctionality.ENF_BUSCAR_SELECCIONAR_PACIENTE, SelectPatientScreen::new);
-        builders.put(RoleFunctionality.ENF_REGISTRAR_VISITA_SIGNOS_VITALES, RegisterNursingVisitScreen::new);
-        builders.put(RoleFunctionality.ENF_REGISTRAR_MEDICAMENTOS_ADMINISTRADOS, RegisterAdministeredMedicationScreen::new);
-        builders.put(RoleFunctionality.ENF_REGISTRAR_PROCEDIMIENTOS_REALIZADOS, RegisterPerformedProcedureScreen::new);
-        builders.put(RoleFunctionality.ENF_REGISTRAR_PRUEBAS_OBSERVACIONES, RegisterPerformedDiagnosticTestScreen::new);
-
-        // Médico
-        builders.put(RoleFunctionality.MED_BUSCAR_SELECCIONAR_PACIENTE, SelectPatientScreen::new);
-        builders.put(RoleFunctionality.MED_CREAR_REGISTRO_HISTORIA_CLINICA, CreateClinicalRecordScreen::new);
-        builders.put(RoleFunctionality.MED_ACTUALIZAR_VER_HISTORIA_CLINICA, ViewClinicalHistoryScreen::new);
-        builders.put(RoleFunctionality.MED_CREAR_ORDEN_MEDICAMENTOS, CreateMedicationOrderScreen::new);
-        builders.put(RoleFunctionality.MED_CREAR_ORDEN_PROCEDIMIENTOS, CreateProcedureOrderScreen::new);
-        builders.put(RoleFunctionality.MED_CREAR_ORDEN_AYUDA_DIAGNOSTICA, CreateDiagnosticAidOrderScreen::new);
-        builders.put(RoleFunctionality.MED_REGISTRAR_RESULTADOS_AYUDA, RegisterDiagnosticResultScreen::new);
+    public FunctionalityScreenFactory(SceneNavigator navigator) {
+        this.navigator = navigator;
     }
 
-    public FunctionalityScreen create(Role role, RoleFunctionality functionality, AppContext appContext, SceneNavigator navigator) {
-        ScreenBuilder builder = builders.get(functionality);
-        if (builder == null) {
-            return new PlaceholderFunctionalityScreen(role, functionality, navigator);
-        }
-        return builder.build(role, functionality, appContext, navigator);
-    }
+    public FunctionalityScreen create(RoleFunctionality functionality, MainApp mainApp, AppContext appContext) {
+        Role role = functionality.getRole();
+        return switch (functionality) {
+            // Recursos humanos (4)
+            case RH_CREAR_USUARIO_EMPLEADO -> new CreateEmployeeScreen(role, functionality, appContext, navigator);
+            case RH_ELIMINAR_USUARIO_EMPLEADO -> new DeleteEmployeeScreen(role, functionality, appContext, navigator);
+            case RH_ACTUALIZAR_DATOS_EMPLEADO -> new UpdateEmployeeScreen(role, functionality, appContext, navigator);
+            case RH_LISTAR_EMPLEADOS_USUARIOS -> new ListEmployeesScreen(role, functionality, appContext, navigator);
 
-    public boolean isMapped(RoleFunctionality functionality) {
-        return builders.containsKey(functionality);
-    }
+            // Administrativo (5)
+            case ADM_REGISTRAR_PACIENTE -> new RegisterPatientScreen(role, functionality, appContext, navigator);
+            case ADM_REGISTRAR_CONTACTO_EMERGENCIA -> new RegisterEmergencyContactScreen(role, functionality, appContext, navigator);
+            case ADM_REGISTRAR_POLIZA_SEGURO -> new RegisterInsurancePolicyScreen(role, functionality, appContext, navigator);
+            case ADM_PROGRAMAR_CITA -> new ScheduleAppointmentScreen(role, functionality, appContext, navigator);
+            case ADM_GENERAR_IMPRIMIR_FACTURA -> new GenerateInvoiceScreen(role, functionality, appContext, navigator);
 
-    @FunctionalInterface
-    private interface ScreenBuilder {
-        FunctionalityScreen build(Role role, RoleFunctionality functionality, AppContext appContext, SceneNavigator navigator);
+            // Soporte (4)
+            case SOP_GESTION_INVENTARIO_MEDICAMENTOS -> new MedicationInventoryScreen(role, functionality, appContext, navigator);
+            case SOP_GESTION_INVENTARIO_PROCEDIMIENTOS -> new ProcedureInventoryScreen(role, functionality, appContext, navigator);
+            case SOP_GESTION_INVENTARIO_AYUDAS -> new DiagnosticAidInventoryScreen(role, functionality, appContext, navigator);
+            case SOP_SOPORTE_TECNICO_USUARIOS -> new SupportTicketScreen(role, functionality, appContext, navigator);
+
+            // Enfermería (5)
+            case ENF_BUSCAR_SELECCIONAR_PACIENTE -> new SelectPatientScreen(role, functionality, appContext, navigator);
+            case ENF_REGISTRAR_VISITA_SIGNOS_VITALES -> new RegisterNursingVisitScreen(role, functionality, appContext, navigator);
+            case ENF_REGISTRAR_MEDICAMENTOS_ADMINISTRADOS -> new RegisterAdministeredMedicationScreen(role, functionality, appContext, navigator);
+            case ENF_REGISTRAR_PROCEDIMIENTOS_REALIZADOS -> new RegisterPerformedProcedureScreen(role, functionality, appContext, navigator);
+            case ENF_REGISTRAR_PRUEBAS_OBSERVACIONES -> new RegisterPerformedDiagnosticTestScreen(role, functionality, appContext, navigator);
+
+            // Médico (7)
+            case MED_BUSCAR_SELECCIONAR_PACIENTE -> new SelectPatientScreen(role, functionality, appContext, navigator);
+            case MED_CREAR_REGISTRO_HISTORIA_CLINICA -> new CreateClinicalRecordScreen(role, functionality, appContext, navigator);
+            case MED_ACTUALIZAR_VER_HISTORIA_CLINICA -> new ViewClinicalHistoryScreen(role, functionality, appContext, navigator);
+            case MED_CREAR_ORDEN_MEDICAMENTOS -> new CreateMedicationOrderScreen(role, functionality, appContext, navigator);
+            case MED_CREAR_ORDEN_PROCEDIMIENTOS -> new CreateProcedureOrderScreen(role, functionality, appContext, navigator);
+            case MED_CREAR_ORDEN_AYUDA_DIAGNOSTICA -> new CreateDiagnosticAidOrderScreen(role, functionality, appContext, navigator);
+            case MED_REGISTRAR_RESULTADOS_AYUDA -> new RegisterDiagnosticResultScreen(role, functionality, appContext, navigator);
+        };
     }
 }

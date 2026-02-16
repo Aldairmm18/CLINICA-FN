@@ -25,7 +25,7 @@ public class SceneNavigator {
         this.windowWidth = windowWidth;
         this.windowHeight = windowHeight;
         this.appContext = appContext;
-        this.screenFactory = new FunctionalityScreenFactory();
+        this.screenFactory = new FunctionalityScreenFactory(this);
     }
 
     public void showRoleSelection() {
@@ -41,7 +41,7 @@ public class SceneNavigator {
     }
 
     public void showFunctionality(Role role, RoleFunctionality functionality) {
-        FunctionalityScreen screen = screenFactory.create(role, functionality, appContext, this);
+        FunctionalityScreen screen = screenFactory.create(functionality, null, appContext);
         BorderPane wrapper = new BorderPane(screen.getRoot());
         setScene(wrapper, "ClinicApp - Funcionalidad");
     }
