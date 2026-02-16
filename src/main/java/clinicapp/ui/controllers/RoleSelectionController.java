@@ -1,16 +1,16 @@
 package clinicapp.ui.controllers;
 
-import clinicapp.MainApp;
 import clinicapp.Role;
+import clinicapp.navigation.SceneNavigator;
 
 public class RoleSelectionController {
-    private final MainApp mainApp;
+    private final SceneNavigator navigator;
 
-    public RoleSelectionController(MainApp mainApp) {
-        this.mainApp = mainApp;
+    public RoleSelectionController(SceneNavigator navigator) {
+        this.navigator = navigator;
     }
 
     public void onRoleSelected(Role role) {
-        mainApp.showRoleDashboard(role);
+        navigator.showRolePanel(role);
     }
 }

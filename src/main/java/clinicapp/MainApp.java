@@ -1,41 +1,20 @@
 package clinicapp;
 
-import clinicapp.ui.RoleDashboardView;
-import clinicapp.ui.RoleSelectionView;
-import clinicapp.ui.controllers.RoleDashboardController;
-import clinicapp.ui.controllers.RoleSelectionController;
+import clinicapp.navigation.SceneNavigator;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
-    private static final double WINDOW_WIDTH = 720;
-    private static final double WINDOW_HEIGHT = 480;
-
-    private Stage primaryStage;
+    private static final double WINDOW_WIDTH = 960;
+    private static final double WINDOW_HEIGHT = 640;
 
     @Override
     public void start(Stage stage) {
-        this.primaryStage = stage;
-        this.primaryStage.setTitle("ClinicApp - Selección de Rol");
-        showRoleSelection();
-        this.primaryStage.show();
-    }
-
-    public void showRoleSelection() {
-        RoleSelectionController controller = new RoleSelectionController(this);
-        RoleSelectionView view = new RoleSelectionView(controller);
-        Scene scene = new Scene(view.getRoot(), WINDOW_WIDTH, WINDOW_HEIGHT);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("ClinicApp - Seleccionar Rol");
-    }
-
-    public void showRoleDashboard(Role role) {
-        RoleDashboardController controller = new RoleDashboardController(this, role);
-        RoleDashboardView view = new RoleDashboardView(controller);
-        Scene scene = new Scene(view.getRoot(), WINDOW_WIDTH, WINDOW_HEIGHT);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("ClinicApp - Panel");
+        AppContext appContext = new AppContext();
+        SceneNavigator navigator = new SceneNavigator(stage, WINDOW_WIDTH, WINDOW_HEIGHT, appContext);
+        stage.setTitle("ClinicApp - Selección de Rol");
+        navigator.showRoleSelection();
+        stage.show();
     }
 
     public static void main(String[] args) {
