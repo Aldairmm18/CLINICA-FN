@@ -12,6 +12,9 @@ public class FunctionalityScreenFactory {
     private final Map<RoleFunctionality, ScreenBuilder> builders = new EnumMap<>(RoleFunctionality.class);
 
     public FunctionalityScreenFactory() {
+        builders.put(RoleFunctionality.RH_REGISTRAR_PERSONAL, CreateEmployeeScreen::new);
+        builders.put(RoleFunctionality.RH_CONTROL_ASISTENCIA, ListEmployeesScreen::new);
+
         builders.put(RoleFunctionality.ADMIN_REGISTRAR_PACIENTES, RegisterPatientScreen::new);
         builders.put(RoleFunctionality.ADMIN_PROGRAMAR_CITAS, ScheduleAppointmentScreen::new);
 
@@ -22,9 +25,6 @@ public class FunctionalityScreenFactory {
         builders.put(RoleFunctionality.ENF_TRIAGE_Y_SIGNOS_VITALES, RegisterNursingVisitScreen::new);
 
         builders.put(RoleFunctionality.SOPORTE_MONITOREAR_SISTEMA, MedicationInventoryScreen::new);
-
-        builders.put(RoleFunctionality.RH_CONTROL_ASISTENCIA, ListEmployeesScreen::new);
-        builders.put(RoleFunctionality.RH_REGISTRAR_PERSONAL, CreateEmployeeScreen::new);
     }
 
     public FunctionalityScreen create(Role role, RoleFunctionality functionality, AppContext appContext, SceneNavigator navigator) {
