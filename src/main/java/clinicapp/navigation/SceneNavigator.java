@@ -40,6 +40,10 @@ public class SceneNavigator {
         setScene(view.getRoot(), "ClinicApp - Panel de Rol");
     }
 
+    public void showDashboard(Role role, AppContext appContext) {
+        showRolePanel(role);
+    }
+
     public void showFunctionality(Role role, RoleFunctionality functionality) {
         FunctionalityScreen screen = screenFactory.create(role, functionality, appContext, this);
         BorderPane wrapper = new BorderPane(screen.getRoot());
